@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -10,7 +11,7 @@ app.use(express.static('public')); // Rendre le dossier public accessible
 
 // --- 2. CONNEXION À LA BASE DE DONNÉES ---
 // ⚠️ ATTENTION : Remplace <TON_MOT_DE_PASSE> par le vrai mot de passe de ton utilisateur MongoDB Atlas
-const MONGO_URI = "mongodb+srv://Kenmogne_Ange:Angieluz2007@tp-inf232.us83osh.mongodb.net/?appName=TP-INF232";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Kenmogne_Ange:Angieluz2007@tp-inf232.us83osh.mongodb.net/?appName=TP-INF232";
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("Connecté à MongoDB Atlas ! ✅"))

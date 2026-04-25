@@ -1,0 +1,17 @@
+{
+  "name": "vaxfrontier",
+  "version": "1.0.0",
+  "description": "Système de collecte de vaccinations - TP INF232",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["vaccination", "cameroon", "node", "express"],
+  "author": "Kenmogne Tagne Ange B",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0"
+  }
+}

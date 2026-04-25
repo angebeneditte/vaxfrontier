@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaxFrontier | Accueil</title>
+    <style>
+        :root { --primary: #2c3e50; --success: #42ae27; --accent: #2871a1; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; color: var(--primary); }
+        .hero { background: var(--primary); color: white; padding: 60px 20px; text-align: center; }
+        .container { max-width: 900px; margin: -40px auto 40px; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .icon { font-size: 70px; margin-bottom: 18px; }
+        .btn { display: inline-block; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        .btn-collecte { background: var(--success); color: white; }
+        .btn-analyse { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>VaxFrontier 🌍</h1>
+    <p>Système Intégré de Collecte et d'Analyse des Vaccinations</p>
+</div>
+
+<div class="container">
+    <div class="grid">
+        <div class="card">
+            <div class="icon">💉</div>
+            <h3>Collecte de Données</h3>
+            <p>Enregistrer une nouvelle vaccination (Routine ou Campagne mobile).</p>
+            <a href="/collecte.html" class="btn btn-collecte">Nouvelle Saisie</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>Analyse Descriptive</h3>
+            <p>Visualiser les statistiques de couverture vaccinale par zone.</p>
+            <a href="/analyse.html" class="btn btn-analyse">Voir les Rapports</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

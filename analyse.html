@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>VaxFrontier | Dashboard Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { 
+            --primary: #1e293b; 
+            --accent: #3b82f6; 
+            --routine: #10b981; 
+            --campagne: #f59e0b;
+            --bg: #f8fafc; 
+        }
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; padding: 40px 20px; 
+            color: var(--primary); 
+        }
+
+        .container { max-width: 1100px; margin: auto; }
+
+        .header { margin-bottom: 40px; }
+        .header h1 { font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
+        .header p { color: #64748b; font-size: 1.1rem; }
+
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .stat-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+
+        /* Petit trait de couleur sur le côté */
+        .stat-card::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+        }
+        .card-total::before { background: var(--accent); }
+        .card-routine::before { background: var(--routine); }
+        .card-campagne::before { background: var(--campagne); }
+
+        .stat-label { color: #64748b; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; }
+        .stat-number { font-size: 3rem; font-weight: 800; margin: 10px 0; }
+
+        .chart-container { 
+            background: white; 
+            padding: 35px; 
+            border-radius: 24px; 
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.08); 
+            margin-top: 40px; 
+        }
+
+        .btn-back { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 12px 28px; 
+            background: var(--primary); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover { background: #0f172a; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Dashboard VaxFrontier 🌍</h1>
+        <p>Analyse de la couverture vaccinale nationale</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card card-total">
+            <div class="stat-label">Total Vaccinés</div>
+            <div class="stat-number" id="totalCount">0</div>
+        </div>
+        <div class="stat-card card-routine">
+            <div class="stat-label">Actes Routine (Hôpital)</div>
+            <div class="stat-number" id="routineCount">0</div>
+        </div>
+        <div class="stat-card card-campagne">
+            <div class="stat-label">Actes Campagne (Mobile)</div>
+            <div class="stat-number" id="campagneCount">0</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h3 style="margin-top:0">Répartition par Région</h3>
+        <canvas id="myChart" height="120"></canvas>
+    </div>
+
+    <div style="text-align:center">
+        <a href="/" class="btn-back">⬅ Menu Principal</a>
+    </div>
+</div>
+
+<script>
+    async function chargerAnalyses() {
+        try {
+            const response = await fetch('/api/statistiques');
+            const data = await response.json();
+
+            document.getElementById('totalCount').innerText = data.length;
+            document.getElementById('routineCount').innerText = data.filter(v => v.contexte === 'ROUTINE').length;
+            document.getElementById('campagneCount').innerText = data.filter(v => v.contexte === 'CAMPAGNE').length;
+
+            const regionsMap = {};
+            data.forEach(v => { regionsMap[v.region] = (regionsMap[v.region] || 0) + 1; });
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            
+            // Création d'un dégradé pour les barres
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, '#3b82f6');
+            gradient.addColorStop(1, '#60a5fa');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(regionsMap),
+                    datasets: [{
+                        label: 'Enfants vaccinés',
+                        data: Object.values(regionsMap),
+                        backgroundColor: gradient,
+                        borderRadius: 10, // Barres arrondies
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { display: false },
+                            ticks: { stepSize: 1 }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        } catch (e) { console.error(e); }
+    }
+    chargerAnalyses();
+</script>
+
+</body>
+</html>
